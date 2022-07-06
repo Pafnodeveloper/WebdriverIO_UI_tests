@@ -12,6 +12,10 @@ export default class Page {
         return $("//header")
     }
 
+    get getFooter() {
+        return $("//footer")
+    }
+
     async currentLanguage() {
         return this.$("//div[@class ='header__select']")
     }

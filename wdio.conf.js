@@ -48,7 +48,7 @@ exports.config = {
     mochaOpts: {
         require: ["@babel/register"],
         ui: 'bdd',
-        timeout: 60000
+        timeout: 120000
     },
     
     before: async function () {

@@ -1,4 +1,3 @@
-import page from "@pages/page"
 import mainPage from "@pages/main.page"
 import allRatesPage from "@pages/allRates.page"
 import tablePage from "@pages/common elements/table.page"
@@ -8,7 +7,7 @@ import { waitAllAsync } from "@fixture/common_functions"
 
 describe("Check languages swap", async function() {
     languages.map(lang => {
-        it.skip(`Change language to ${lang}`, async function() {
+        it(`Change language to ${lang}`, async function() {
 
             const header = await mainPage.getHeader
             await header.waitForDisplayed({timeout:5000, timeoutMsg:"header isn't displayed"})
@@ -30,9 +29,9 @@ describe("Check languages swap", async function() {
     })
 })
 
-describe("Check exchange-rates functionality", async () => {
+describe("Check exchange-rates page functionality", async () => {
     languages.map(lang => {
-        it.skip(`allRates button is clickable in ${lang}`, async () => {
+        it(`allRates button is clickable in ${lang}`, async () => {
             await mainPage.open(lang.toLowerCase())
 
             const allRatesButton = await mainPage.allExRatesButton
@@ -46,7 +45,21 @@ describe("Check exchange-rates functionality", async () => {
     })
 
     languages.map(lang => {
-        it.skip(`All rates table is displayed correctly in ${lang}`, async () => {
+        it(`Check header and footer presence in ${lang}`, async () => {
+            await mainPage.open(lang.toLowerCase() + "/private/exchange-rates/")
+
+            const header = allRatesPage.getHeader
+            await header.waitForDisplayed({timeout:5000, timeoutMsg:"header isn't displayed"})
+            await expect(header).toBeDisplayed()
+
+            const footer = allRatesPage.getFooter
+            await footer.waitForDisplayed({timeout:5000, timeoutMsg:"footer isn't displayed"})
+            await expect(footer).toBeDisplayed()
+        })
+    })
+
+    languages.map(lang => {
+        it(`All rates table is displayed correctly in ${lang}`, async () => {
             await mainPage.open(lang.toLowerCase() + "/private/exchange-rates/")
 
             const allRatesTable = await allRatesPage.getRatesTable
@@ -81,14 +94,19 @@ describe("Check exchange-rates functionality", async () => {
 
             const sideMenuOptions = await menuPage.sideMenuOptions.call(sideMenu)
 
-            for (const webEl of sideMenuOptions) {
-                const webElA = await menuPage.getAhref.call(webEl)
-                const ref = await webElA.getAttribute("href")
-                await webElA.scrollIntoView()
-                await webElA.click()
-                
+            const hrefArrayElements = await waitAllAsync(sideMenuOptions, async (webEl) => {
+                let webElA = await menuPage.getAhref.call(webEl)
+                return webElA
+            })
+
+            for (let webEl of hrefArrayElements) {
+                let href = await webEl.getAttribute("href")
+                await webEl.scrollIntoView()
+                await webEl.waitUntil(await webEl.isDisplayedInViewport, {timeout:5000, timeoutMsg:"webEl isn't in viewport"})
+                await webEl.click()
+
                 const url = await browser.getUrl()
-                expectChai(url, "It's not the needed url").to.include(ref)
+                expectChai(url, "It's not the needed url").to.include(href)
                 await mainPage.open(lang.toLowerCase() + "/private/exchange-rates/")
             }
         })
