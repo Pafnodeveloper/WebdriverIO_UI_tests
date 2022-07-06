@@ -5,7 +5,7 @@ import menuPage from "@pages/common elements/menu.page"
 import { languages, currencyAbbreviation, rowsAbbreviation } from "@fixture/fixture"
 import { waitAllAsync } from "@fixture/common_functions"
 
-describe("Check languages swap", async function() {
+describe("Check languages swap @LANG", async function() {
     languages.map(lang => {
         it(`Change language to ${lang}`, async function() {
 
@@ -29,7 +29,7 @@ describe("Check languages swap", async function() {
     })
 })
 
-describe("Check exchange-rates page functionality", async () => {
+describe("Check exchange-rates page functionality @MAIN", async () => {
     languages.map(lang => {
         it(`allRates button is clickable in ${lang}`, async () => {
             await mainPage.open(lang.toLowerCase())

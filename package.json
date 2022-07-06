@@ -30,6 +30,8 @@
     },
 
     "scripts": {
-        "wdio": "wdio run wdio.conf.js"
+        "lang": "wdio run wdio.conf.js --mochaOpts.grep @LANG",
+        "currencyRates": "wdio run wdio.conf.js --mochaOpts.grep @MAIN",
+        "all": "wdio run wdio.conf.js"
     }
 }

@@ -48,7 +48,8 @@ exports.config = {
     mochaOpts: {
         require: ["@babel/register"],
         ui: 'bdd',
-        timeout: 120000
+        timeout: 120000,
+        // grep: '@commonTest'
     },
     
     before: async function () {
@@ -61,7 +62,7 @@ exports.config = {
     afterTest: function (
         test, 
         context, 
-        {error, result, duration, passed, retries}
+        {error}
         ) {
             if(error) {
                 browser.takeScreenshot()
